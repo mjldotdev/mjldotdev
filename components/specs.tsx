@@ -4,6 +4,7 @@ export default function Section() {
   return (
     <section
       className="border-white/5 border-t bg-zinc-950 px-8 py-24 md:py-32"
+      data-animate="fade-up"
       id="specs"
     >
       <div className="mx-auto max-w-7xl">

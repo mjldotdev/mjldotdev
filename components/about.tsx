@@ -7,10 +7,15 @@ import {
   Signal,
   Terminal,
 } from "lucide-react";
+import { AnimatedCounter } from "./animations/counter";
 
 export default function Section() {
   return (
-    <section className="bg-zinc-900 px-8 py-24 md:py-48" id="about">
+    <section
+      className="bg-zinc-900 px-8 py-24 md:py-48"
+      data-animate="fade-up"
+      id="about"
+    >
       <div className="mx-auto max-w-7xl">
         {/* <!-- Main Bento Grid (Top Area) --> */}
         <div className="mb-6 grid grid-cols-1 gap-6 md:grid-cols-12">
@@ -47,7 +52,7 @@ export default function Section() {
             </div>
             {/* <!-- Experiences Card --> */}
             <div className="relative flex flex-1 flex-col overflow-hidden rounded-3xl border border-white/5 bg-zinc-950 p-8 lg:p-10">
-              <div className="timeline-track absolute top-0 bottom-0 left-8 w-px lg:left-10">
+              <div className="timeline-track absolute top-0 bottom-0 left-8 w-px lg:left-14">
                 <div className="kinetic-indicator absolute left-[-1px] w-[3px]" />
               </div>
               <div className="space-y-10 pl-8 lg:pl-14">
@@ -85,7 +90,8 @@ export default function Section() {
                 <div className="experience-node relative">
                   <div className="node-dot absolute top-1.5 -left-[37px] z-10 h-3 w-3 rounded-full border border-white/20 bg-zinc-950 transition-all lg:-left-[45px]" />
                   <h4 className="mb-1 flex items-center font-bold text-base text-zinc-500 uppercase tracking-tight transition-colors">
-                    Civil Engineer / Project Manager
+                    Civil Engineer / <br className="md:hidden" />
+                    Project Manager
                     <span className="ml-3 font-mono text-[9px] text-zinc-600">
                       2017-2023
                     </span>
@@ -106,11 +112,8 @@ export default function Section() {
               <div className="mb-1 font-bold text-[9px] text-zinc-500 uppercase tracking-[0.2em]">
                 Years Active
               </div>
-              <div
-                className="font-bold text-3xl text-white tracking-tighter"
-                data-counter="5"
-              >
-                <span className="counter-value">5</span>
+              <div className="font-bold text-3xl text-white tracking-tighter">
+                <AnimatedCounter endValue={5}>0</AnimatedCounter>
                 <span className="text-blue-500">+</span>
               </div>
             </div>
@@ -121,11 +124,10 @@ export default function Section() {
               <div className="mb-1 font-bold text-[9px] text-zinc-500 uppercase tracking-[0.2em]">
                 Deployments
               </div>
-              <div
-                className="font-bold text-3xl text-white tracking-tighter"
-                data-counter="40"
-              >
-                <span className="counter-value">40</span>
+              <div className="font-bold text-3xl text-white tracking-tighter">
+                <span className="counter-value">
+                  <AnimatedCounter endValue={40}>0</AnimatedCounter>
+                </span>
                 <span className="text-blue-500">+</span>
               </div>
             </div>
@@ -136,11 +138,8 @@ export default function Section() {
               <div className="mb-1 font-bold text-[9px] text-zinc-500 uppercase tracking-[0.2em]">
                 Uptime Rate
               </div>
-              <div
-                className="font-bold text-3xl text-white tracking-tighter"
-                data-counter="99"
-              >
-                <span className="counter-value">99</span>
+              <div className="font-bold text-3xl text-white tracking-tighter">
+                <AnimatedCounter endValue={99}>0</AnimatedCounter>
                 <span className="text-blue-500 text-xl">%</span>
               </div>
             </div>
@@ -148,7 +147,7 @@ export default function Section() {
           </div>
         </div>
         {/* <!-- Tech Stack Area --> */}
-        <div className="mt-12">
+        <div className="mt-12" data-animate="fade-up">
           <div className="mb-10 items-end justify-between border-white/5 border-t pt-8 md:flex">
             <h3 className="font-black text-4xl text-white uppercase leading-[0.9] tracking-tighter">
               Technology

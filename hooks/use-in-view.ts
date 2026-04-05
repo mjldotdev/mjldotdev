@@ -1,13 +1,9 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 interface UseInViewOptions extends IntersectionObserverInit {
-  /**
-   * If true, the observer will unobserve the element after it intersects once.
-   * Perfect for entrance animations and counters.
-   * @default false
-   */
+  initialInView?: boolean; // SSR control
   triggerOnce?: boolean;
 }
 
@@ -16,13 +12,25 @@ export function useInView<T extends Element = HTMLElement>({
   root = null,
   rootMargin = "0px",
   triggerOnce = false,
+  initialInView = false,
 }: UseInViewOptions = {}) {
   const ref = useRef<T | null>(null);
-  const [isIntersecting, setIsIntersecting] = useState(false);
-  const [hasTriggered, setHasTriggered] = useState(false);
+  const [isIntersecting, setIsIntersecting] = useState(initialInView);
+  const hasTriggeredRef = useRef(false);
 
-  // Stringify the threshold array to prevent infinite re-renders if passed inline
-  const thresholdString = JSON.stringify(threshold);
+  // Stabilize threshold (array or number)
+  const thresholdMemo = useMemo(() => {
+    return Array.isArray(threshold) ? [...threshold] : threshold;
+  }, [JSON.stringify(threshold)]);
+
+  const observerOptions = useMemo(
+    () => ({
+      threshold: thresholdMemo,
+      root,
+      rootMargin,
+    }),
+    [thresholdMemo, root, rootMargin]
+  );
 
   useEffect(() => {
     const element = ref.current;
@@ -30,45 +38,32 @@ export function useInView<T extends Element = HTMLElement>({
       return;
     }
 
-    // SSR fallback
-    if (typeof window === "undefined" || !window.IntersectionObserver) {
+    // SSR / unsupported fallback
+    if (typeof window === "undefined" || !("IntersectionObserver" in window)) {
       setIsIntersecting(true);
       return;
     }
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        const isElementIntersecting = entry.isIntersecting;
+    const observer = new IntersectionObserver(([entry]) => {
+      const isVisible = entry.isIntersecting;
 
-        // If triggerOnce is true, we only care about the first intersection
-        if (triggerOnce) {
-          if (isElementIntersecting && !hasTriggered) {
-            setIsIntersecting(true);
-            setHasTriggered(true);
-            observer.unobserve(element); // Stop observing for performance
-          }
-        } else {
-          setIsIntersecting(isElementIntersecting);
+      if (triggerOnce) {
+        if (isVisible && !hasTriggeredRef.current) {
+          hasTriggeredRef.current = true;
+          setIsIntersecting(true);
+          observer.unobserve(element);
         }
-      },
-      {
-        // Parse the threshold back into an array/number
-        threshold: JSON.parse(thresholdString),
-        root,
-        rootMargin,
+      } else {
+        setIsIntersecting(isVisible);
       }
-    );
+    }, observerOptions);
 
-    if (!hasTriggered) {
-      observer.observe(element);
-    }
+    observer.observe(element);
 
     return () => {
-      if (element) {
-        observer.unobserve(element);
-      }
+      observer.disconnect(); // ✅ full cleanup
     };
-  }, [thresholdString, root, rootMargin, triggerOnce, hasTriggered]);
+  }, [observerOptions, triggerOnce]);
 
   return { ref, isIntersecting };
 }

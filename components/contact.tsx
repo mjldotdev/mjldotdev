@@ -2,6 +2,7 @@ export default function Section() {
   return (
     <section
       className="border-white/5 border-t bg-zinc-950 px-8 py-24 text-center md:py-48"
+      data-animate="fade-up"
       id="contact"
     >
       <h2 className="mx-auto mb-12 max-w-4xl font-extrabold text-5xl text-white leading-[0.9] tracking-tighter md:text-8xl">

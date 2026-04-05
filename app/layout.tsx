@@ -3,6 +3,7 @@ import { JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import Footer from "@/components/footer";
 import Header from "@/components/navbar";
+import ScrollAnimationProvider from "@/components/providers/animation-provider";
 import LenisProvider from "@/components/providers/lenis-provider";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
@@ -63,12 +64,14 @@ export default function RootLayout({
           themes={["vanguard", "light", "titanium", "architect"]}
         >
           <LenisProvider>
-            <TooltipProvider>
-              <Header />
-              <main className="min-h-screen">{children}</main>
-              <Footer />
-            </TooltipProvider>
-            <Toaster />
+            <ScrollAnimationProvider>
+              <TooltipProvider>
+                <Header />
+                <main className="min-h-screen">{children}</main>
+                <Footer />
+              </TooltipProvider>
+              <Toaster />
+            </ScrollAnimationProvider>
           </LenisProvider>
         </ThemeProvider>
       </body>

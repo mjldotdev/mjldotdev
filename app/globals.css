@@ -254,6 +254,11 @@ html.lenis body {
   }
 }
 
+.reveal-portrait {
+  clip-path: inset(0 0 100% 0);
+  animation: reveal-up 1.2s cubic-bezier(0.77, 0, 0.175, 1) forwards;
+}
+
 /* Premium Spring Physics for Hero Image from SCREEN_100 */
 .hero-visual-transition {
   transition:
@@ -356,4 +361,203 @@ html.lenis body {
   pointer-events: auto;
   opacity: 1;
   transform: scale(1);
+}
+
+/* =========================================
+   1. BASE ANIMATION STATES
+   ========================================= */
+
+/* Hide all animated elements by default */
+[data-animate] {
+  opacity: 0;
+}
+
+/* Make them visible when entering */
+[data-animate].is-visible {
+  opacity: 1;
+}
+
+/* Force them to stay visible while the exit animation plays */
+[data-animate].is-exiting {
+  opacity: 1;
+}
+
+/* =========================================
+   2. STANDARD ANIMATIONS (ENTER & EXIT)
+   ========================================= */
+
+/* --- Fade In --- */
+[data-animate="fade-in"].is-visible {
+  animation: fade-in 1s ease-out forwards;
+}
+[data-animate="fade-in"].is-exiting {
+  animation: fade-out 0.8s ease-in forwards;
+}
+
+/* --- Fade Up (Buttons) --- */
+[data-animate="fade-up"].is-visible {
+  animation: fade-up 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+[data-animate="fade-up"].is-exiting {
+  animation: fade-down-out 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* --- Fly In Up (Hero Image) --- */
+[data-animate="fly-in-up"].is-visible {
+  animation: fly-in-up 1.4s cubic-bezier(0.17, 0.67, 0.17, 1.1) forwards;
+}
+[data-animate="fly-in-up"].is-exiting {
+  animation: fly-out-down 1s cubic-bezier(0.17, 0.67, 0.17, 1.1) forwards;
+}
+
+/* --- Text Fade (Paragraph) --- */
+[data-animate="text-fade"].is-visible {
+  animation: fade-in-scale 1s ease-out forwards;
+}
+[data-animate="text-fade"].is-exiting {
+  animation: fade-out-scale 0.8s ease-in forwards;
+}
+
+/* =========================================
+   3. SPECIALIZED: TEXT-Y-ANIMATION (H1)
+   ========================================= */
+
+/* The parent H1 becomes visible */
+[data-animate="text-y-animation"].is-visible,
+[data-animate="text-y-animation"].is-exiting {
+  opacity: 1;
+}
+
+/* Animate the inner spans when visible */
+[data-animate="text-y-animation"].is-visible span {
+  display: block;
+  animation: text-reveal-y 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* Add an extra 150ms delay to the 2nd line, merging with the provider's stagger! */
+[data-animate="text-y-animation"].is-visible div:nth-child(2) span {
+  animation-delay: calc(var(--custom-delay, 0ms) + 150ms);
+}
+
+/* Exit animation for the inner spans */
+[data-animate="text-y-animation"].is-exiting span {
+  display: block;
+  animation: text-hide-y 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* Delay the 2nd line on exit too */
+[data-animate="text-y-animation"].is-exiting div:nth-child(2) span {
+  animation-delay: calc(var(--custom-delay, 0ms) + 100ms);
+}
+
+/* =========================================
+   4. KEYFRAMES
+   ========================================= */
+
+/* Entrances */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fly-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(150px) rotate(5deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) rotate(2deg);
+  }
+}
+
+@keyframes fade-in-scale {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes text-reveal-y {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Exits */
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes fade-down-out {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+}
+
+@keyframes fly-out-down {
+  from {
+    opacity: 1;
+    transform: translateY(0) rotate(2deg);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(150px) rotate(5deg);
+  }
+}
+
+@keyframes fade-out-scale {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
+@keyframes text-hide-y {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(100%);
+    opacity: 0;
+  }
 }

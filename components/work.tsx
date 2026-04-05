@@ -1,6 +1,10 @@
 export default function Section() {
   return (
-    <section className="bg-zinc-950 px-8 py-24 md:py-32" id="work">
+    <section
+      className="bg-zinc-950 px-8 py-24 md:py-32"
+      data-animate="fade-up"
+      id="work"
+    >
       <div className="mx-auto max-w-7xl">
         <div className="mb-12 flex items-end justify-between">
           <div className="space-y-4">
